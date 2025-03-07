@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% block title %}Lista de Usuarios{% endblock %}
+{% block content %}
+<h1 class="mb-4">Lista de Usuarios</h1>
+
+<form id="filter-form" method="GET" class="mb-4">
+    <div class="row">
+        <!-- Filtro de Institución -->
+        <div class="col-md-4">
+            <label class="form-label">Filtrar por Institución</label>
+            <div id="institucion-filters" class="d-flex flex-column gap-1">
+                {% for value, label in form.institucion.choices %}
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input institution-checkbox" 
+                           name="institucion" value="{{ value }}" 
+                           id="institucion-{{ value }}" 
+                           {% if value in institucion_filtro %}checked{% endif %}>
+                    <label class="form-check-label" for="institucion-{{ value }}">{{ label }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Filtro de Cargo -->
+        <div class="col-md-4">
+            <label class="form-label">Filtrar por Cargo</label>
+            <div id="cargo-filters" class="d-flex flex-column gap-1">
+                {% for value, label in form.cargo.choices %}
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input cargo-checkbox" 
+                           name="cargo" value="{{ value }}" 
+                           id="cargo-{{ value }}" 
+                           {% if value in cargo_filtro %}checked{% endif %}>
+                    <label class="form-check-label" for="cargo-{{ value }}">{{ label }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="col-md-4 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary w-100">Quitar Filtros</a>
+        </div>
+    </div>
+
+    <!-- Mostrar burbujas de filtros seleccionados -->
+    <div id="selected-filters" class="mt-3">
+        <div class="d-flex flex-wrap gap-2">
+            {% for institucion in institucion_filtro %}
+            <span class="badge bg-primary">
+                {{ institucion }}
+                <a href="{{ institucion_urls[institucion] }}" 
+                   class="text-white ms-2" style="text-decoration: none;">×</a>
+            </span>
+            {% endfor %}
+
+            {% for cargo in cargo_filtro %}
+            <span class="badge bg-success">
+                {{ cargo }}
+                <a href="{{ cargo_urls[cargo] }}" 
+                   class="text-white ms-2" style="text-decoration: none;">×</a>
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+</form>
+
+<div class="d-flex justify-content-end mb-3">
+    <a href="{{ url_for('exportar', institucion=request.args.getlist('institucion'), cargo=request.args.getlist('cargo')) }}" 
+       class="btn btn-success">
+        Exportar a Excel
+    </a>
+</div>
+
+<a href="{{ url_for('agregar') }}" class="btn btn-success mb-3">Agregar Usuario</a>
+
+<!-- Tabla de usuarios -->
+<table class="table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>Nombre Completo</th>
+            <th>Correo</th>
+            <th>Cargo</th>
+            <th>Institución</th>
+            <th>Teléfono</th>
+            <th>Correo de Secretaría</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario.nombre }} {{ usuario.apellido_paterno }} {{ usuario.apellido_materno }}</td>
+            <td>{{ usuario.correo }}</td>
+            <td>{{ usuario.cargo }}</td>
+            <td>{{ usuario.institucion }}</td>
+            <td>{{ usuario.telefono }}</td>
+            <td>{{ usuario.correo_secretaria or 'N/A' }}</td> <!-- Muestra "N/A" si está vacío -->
+            <td>
+                <a href="{{ url_for('editar', id=usuario.id) }}" class="btn btn-warning btn-sm">Editar</a>
+                <a href="{{ url_for('eliminar', id=usuario.id) }}" class="btn btn-danger btn-sm">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- JavaScript para manejar la interacción dinámica -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('filter-form');
+
+    // Escuchar cambios en los checkboxes
+    document.querySelectorAll('.institution-checkbox, .cargo-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            form.submit(); // Enviar el formulario automáticamente
+        });
+    });
+});
+</script>
+{% endblock %}

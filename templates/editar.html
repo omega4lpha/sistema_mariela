@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Editar Usuario{% endblock %}
+{% block content %}
+<h1 class="mb-4">Editar Usuario</h1>
+
+<form method="POST" class="needs-validation" novalidate>
+    {{ form.hidden_tag() }}
+    
+    <div class="mb-3">
+        {{ form.nombre.label(class="form-label") }}
+        {{ form.nombre(class="form-control", required=True) }}
+        {% if form.nombre.errors %}
+        <div class="alert alert-danger mt-2">
+            {% for error in form.nombre.errors %}
+            <small>{{ error }}</small><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.apellido_paterno.label(class="form-label") }}
+        {{ form.apellido_paterno(class="form-control", required=True) }}
+        {% if form.apellido_paterno.errors %}
+        <div class="alert alert-danger mt-2">
+            {% for error in form.apellido_paterno.errors %}
+            <small>{{ error }}</small><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.apellido_materno.label(class="form-label") }}
+        {{ form.apellido_materno(class="form-control", required=True) }}
+        {% if form.apellido_materno.errors %}
+        <div class="alert alert-danger mt-2">
+            {% for error in form.apellido_materno.errors %}
+            <small>{{ error }}</small><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.correo.label(class="form-label") }}
+        {{ form.correo(class="form-control", required=True) }}
+        {% if form.correo.errors %}
+        <div class="alert alert-danger mt-2">
+            {% for error in form.correo.errors %}
+            <small>{{ error }}</small><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.cargo.label(class="form-label") }}
+        {{ form.cargo(class="form-control", required=True) }}
+        {% if form.cargo.errors %}
+        <div class="alert alert-danger mt-2">
+            {% for error in form.cargo.errors %}
+            <small>{{ error }}</small><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.institucion.label(class="form-label") }}
+        {{ form.institucion(class="form-control", required=True) }}
+        {% if form.institucion.errors %}
+        <div class="alert alert-danger mt-2">
+            {% for error in form.institucion.errors %}
+            <small>{{ error }}</small><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <div class="mb-3">
+        {{ form.telefono.label(class="form-label") }}
+        {{ form.telefono(class="form-control", required=True) }}
+        {% if form.telefono.errors %}
+        <div class="alert alert-danger mt-2">
+            {% for error in form.telefono.errors %}
+            <small>{{ error }}</small><br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Actualizar</button>
+</form>
+{% endblock %}
